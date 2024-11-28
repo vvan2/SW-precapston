@@ -102,56 +102,6 @@ const setAiMessage = (aiMessage) => {
   closePopup();
 };
 
-
-
-  // // 문자 발송 함수 (서버로 데이터 전송)
-  // const handleSendMessage = async () => {
-  //   try {
-  //     // 수신번호 배열이 비어 있는지 확인
-  //     if (recipients.length === 0) {
-  //       alert('수신번호를 하나 이상 추가해주세요.');
-  //       return;
-  //     }
-  
-  //     // 문자 내용 업데이트 (GIF URL 추가)
-  //     const updatedContent = imageURL
-  //       ? `${messageContent}\nGIF URL: ${imageURL}`
-  //       : messageContent;
-  
-  //     // Request Body 생성
-  //     const messageData = {
-  //       text: updatedContent,
-  //       img_path: image ? URL.createObjectURL(image) : "", // 이미지 파일 URL로 변환
-  //       phone_num: recipients, // 수신번호 배열
-  //     };
-  
-  //     // 디버그용 로그 추가
-  //     console.log('=== 발송 데이터 확인 ===');
-  //     console.log('문자 내용 (text):', messageData.text);
-  //     console.log('이미지 URL (img_path):', messageData.img_path);
-  //     console.log('수신번호 배열 (phone_num):', messageData.phone_num);
-  
-  //     // API 요청
-  //     const response = await fetch('http://localhost:8080/api/send', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(messageData),
-  //     });
-  
-  //     // 응답 처리
-  //     if (response.ok) {
-  //       alert('메시지가 성공적으로 발송되었습니다.');
-  //     } else {
-  //       const errorData = await response.json();
-  //       alert(`메시지 발송 실패: ${errorData.message || '알 수 없는 오류'}`);
-  //     }
-  //   } catch (error) {
-  //     console.error('메시지 발송 중 오류 발생:', error);
-  //     alert('메시지 발송 중 오류가 발생했습니다.');
-  //   }
-  // };
   // 문자 발송 함수 (서버로 데이터 전송)
   const handleSendMessage = async () => {
     if (!isSessionValid()) {
@@ -167,7 +117,6 @@ const setAiMessage = (aiMessage) => {
       return;
     }
 
-    setImageName([]); // 이미지 생성 결과를 초기화
 
     const combinedMessage = messageContent + "\n" + (Array.isArray(imageName) ? '\n' + imageName.join(', ') : imageName || '');
 
@@ -194,6 +143,8 @@ const setAiMessage = (aiMessage) => {
         const result = await response.json();
         console.log('문자 발송 성공:', result);
         alert('문자가 성공적으로 발송되었습니다!');
+
+        setImageName(null);
       } else {
         console.error('문자 발송 실패:', response.statusText);
         alert('문자 발송에 실패했습니다.');
@@ -290,23 +241,7 @@ const setAiMessage = (aiMessage) => {
           </div>
         </div>
       </div>
-
-      {/* <div className="basic-section">
-        <p>문자</p>
-      </div>
-
-      <div className="sub-container">
-        <span>일반문자</span>
-        <span>광고문자</span>
-        <span>광고이용안내</span>
-      </div>
-
-      <div className="notice-section">
-        <p>90byte 초과 시, 장문으로 전환됩니다. 최대 2,000byte까지 작성이 가능합니다.</p>
-        <p>이미지 추가 시, 포토 문자로 전환됩니다. 이미지 최대 3장(권장 사이즈 640x960) + 2,000byte까지 작성이 가능합니다.</p>
-        <p>광고성 문자는 [광고문자]에서 발송해주세요. 080번호를 무료로 제공합니다.</p>
-        <p>문자 발송 시 [씨앗 {'>'} 충전금 {'>'} 포인트] 순서로 사용됩니다.</p>
-      </div> */}
+      
       {/* 섹션을 가로로 배치 */}
       <div className="horizontal-sections">
         {/* 메시지 입력 섹션 */}
@@ -333,17 +268,17 @@ const setAiMessage = (aiMessage) => {
           <br></br><br></br>
           {/* 이미지 또는 GIF 추가 섹션 */}
           <div className="image-gif-upload">
-            <div>이미지 or GIF 추가</div>
             
             {/* 이미지 미리보기: image 상태가 있을 때만 표시 */}
             {image && (
               <div className="image-preview">
+                <div>이미지 or GIF</div>
                 <br></br>
                 <img src={URL.createObjectURL(image)} alt="미리보기 이미지" style={{ maxWidth: '50%', height: 'auto', marginBottom: '10px' }} />
               </div>
             )}
             
-            <input type="file" onChange={handleImageUpload} />
+          
           </div>
 
         </div>

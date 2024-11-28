@@ -130,6 +130,7 @@ function AiMessagePopup({ closePopup, setAiMessage }) {
     const imageDTO = {
       message: purposeContent,
       concept: mood,
+      group: organization,
       base64Image: referenceImage,
     };
 
@@ -190,6 +191,7 @@ function AiMessagePopup({ closePopup, setAiMessage }) {
       category: gif,
       message: gif === '애니' ? '' : purposeContent,
       concept: gif === '애니' ? '' : mood,
+      group: gif === '애니' ? '' : organization,
       who: gif === '애니' ? subject : '',
       move: gif === '애니' ? action : '',
       where: gif === '애니' ? location : '',
@@ -390,9 +392,24 @@ function AiMessagePopup({ closePopup, setAiMessage }) {
                   value={otherInfo}
                   onChange={(e) => {
                     setOtherInfo(e.target.value); // otherInfo 업데이트
-                    // setOrganization(e.target.value); // organization을 otherInfo 값으로 설정
+                    
                   }}
                   placeholder="원하는 조직을 입력하세요."
+                  disabled={organization !== '기타'} // "기타"가 선택되지 않았으면 비활성화
+                  onBlur={() => setOrganization(otherInfo)}
+                />
+              </div>
+            )}
+
+            {/* "기타"를 선택하지 않았을 때 input 비활성화 (보이는 상태 유지) */}
+            {organization !== '기타' && (
+              <div className="input-section">
+                <label>기타</label>
+                <input
+                  type="text"
+                  value={otherInfo}
+                  placeholder="기타를 선택하세요."
+                  disabled // 비활성화 처리
                 />
               </div>
             )}
@@ -417,13 +434,6 @@ function AiMessagePopup({ closePopup, setAiMessage }) {
                       <option value="만화">만화</option>
                     </select>
                   </div>
-
-              
-
-              {/* <div className="input-section">
-                <label>저희가 참고할 이미지를 첨부해주세요 (선택)</label>
-                <input type="file" onChange={handleFileChange} />
-              </div> */}
 
               <button onClick={handleGenerateImage} disabled={isLoading}>
                 {isLoading ? '이미지 생성 중...' : '이미지 생성하기'}
@@ -543,9 +553,24 @@ function AiMessagePopup({ closePopup, setAiMessage }) {
                   value={otherInfo}
                   onChange={(e) => {
                     setOtherInfo(e.target.value); // otherInfo 업데이트
-                    // setOrganization(e.target.value); // organization을 otherInfo 값으로 설정
+                    
                   }}
                   placeholder="원하는 조직을 입력하세요."
+                  disabled={organization !== '기타'} // "기타"가 선택되지 않았으면 비활성화
+                  onBlur={() => setOrganization(otherInfo)}
+                />
+              </div>
+            )}
+
+            {/* "기타"를 선택하지 않았을 때 input 비활성화 (보이는 상태 유지) */}
+            {organization !== '기타' && (
+              <div className="input-section">
+                <label>기타</label>
+                <input
+                  type="text"
+                  value={otherInfo}
+                  placeholder="기타를 선택하세요."
+                  disabled // 비활성화 처리
                 />
               </div>
             )}
